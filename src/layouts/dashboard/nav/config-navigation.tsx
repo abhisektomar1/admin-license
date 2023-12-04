@@ -1,0 +1,36 @@
+// routes
+import { PATH_DASHBOARD } from '../../../routes/paths';
+// components
+import SvgColor from '../../../components/svg-color';
+
+// ----------------------------------------------------------------------
+
+const icon = (name: string) => (
+  <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
+);
+
+const ICONS = {
+  user: icon('ic_user'),
+  ecommerce: icon('ic_ecommerce'),
+  analytics: icon('ic_analytics'),
+  dashboard: icon('ic_dashboard'),
+  booking: icon('ic_booking'),
+  invoice: icon('ic_invoice'),
+};
+
+const navConfig = [
+  // GENERAL
+  // ----------------------------------------------------------------------
+  {
+    subheader: 'Main',
+    items: [
+      { title: 'Dashboard', path: PATH_DASHBOARD.home, icon: ICONS.dashboard },
+      { title: 'Cases', path: PATH_DASHBOARD.cases.list, icon: ICONS.ecommerce },
+      { title: 'Category', path: PATH_DASHBOARD.category.list, icon: ICONS.analytics },
+      { title: 'Appointment', path: PATH_DASHBOARD.appointment.root, icon: ICONS.booking},
+      { title: 'Slots', path: PATH_DASHBOARD.slots.root, icon: ICONS.invoice },
+    ],
+  },
+];
+
+export default navConfig;
