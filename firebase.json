@@ -1,7 +1,6 @@
 {
   "hosting": {
     "public": "build",
-    "site": "licence-admin-app",
     "ignore": [
       "firebase.json",
       "**/.*",

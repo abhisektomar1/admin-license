@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "licence-admin"
-  }
+    "default": "admin-licence",
+    "staging": "admin-licence"
+  },
+  "targets": {},
+  "etags": {}
 }
