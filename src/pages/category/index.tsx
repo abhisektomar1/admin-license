@@ -199,7 +199,7 @@ export default function UserListPage() {
   };
 
   const handleEditRow = (id: string) => {
-    navigate(PATH_DASHBOARD.cases.edit(paramCase(id)));
+   
   };
 
   const handleResetFilter = () => {
@@ -219,13 +219,13 @@ export default function UserListPage() {
           heading="Category List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Category', href: PATH_DASHBOARD.category.root },
+            { name: 'Category', href: PATH_DASHBOARD.clientMaster.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              to={PATH_DASHBOARD.category.new}
+              to={PATH_DASHBOARD.clientMaster.new}
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
             >

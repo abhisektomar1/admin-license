@@ -199,7 +199,7 @@ export default function EditCasesPostForm() {
                 console.log(e);
                 enqueueSnackbar('Cases can"t update success!', { variant: "error" });
             }).finally(() => {
-                navigate(PATH_DASHBOARD.cases.list)
+                navigate(PATH_DASHBOARD.clientAccess.list)
             });
         } catch (error) {
             console.error(error);

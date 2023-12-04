@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { paramCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
@@ -259,7 +258,7 @@ export default function AppointmentPage() {
   };
 
   const handleEditRow = (id: string) => {
-    navigate(PATH_DASHBOARD.cases.edit(paramCase(id)));
+   
   };
 
   const handleResetFilter = () => {
@@ -295,7 +294,7 @@ export default function AppointmentPage() {
           heading="Appointment List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Appointment', href: PATH_DASHBOARD.appointment.root },
+            { name: 'Appointment', href: PATH_DASHBOARD.ipMaster.root },
             { name: 'List' },
           ]}
         />

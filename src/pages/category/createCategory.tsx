@@ -99,7 +99,7 @@ export default function Create() {
         console.log(e);
         enqueueSnackbar('Cases can"t create success!',{ variant:"error" });
       }).finally(()=>{
-        navigate(PATH_DASHBOARD.category.list)
+        navigate(PATH_DASHBOARD.clientMaster.list)
       });      
     } catch (error) {
       console.error(error);
@@ -123,7 +123,7 @@ export default function Create() {
             },
             {
               name: 'Category',
-              href: PATH_DASHBOARD.category.list,
+              href: PATH_DASHBOARD.clientMaster.list,
             },
             {
               name: 'Create',
