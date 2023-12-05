@@ -29,7 +29,7 @@ export const PATH_DASHBOARD = {
   },
   ipMaster: {
     root: path(ROOTS_DASHBOARD, '/ipMaster'),
-    // new: path(ROOTS_DASHBOARD, '/category/new'),
+     new: path(ROOTS_DASHBOARD, '/ipMaster/new'),
     list: path(ROOTS_DASHBOARD, '/ipMaster/list'),
     // edit: (name: string) => path(ROOTS_DASHBOARD, `/category/${name}/edit`),
   },

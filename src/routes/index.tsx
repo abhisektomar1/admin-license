@@ -19,6 +19,7 @@ import {
   AppointmentList,
   Slots,
   EditCases,
+  Create,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -71,7 +72,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/ipMaster/list" replace />, index: true },
             { path: 'list', element: <AppointmentList /> },
-            // { path: 'new', element: <CreateCategory /> },
+             { path: 'new', element: <Create /> },
           ],
         },
         {

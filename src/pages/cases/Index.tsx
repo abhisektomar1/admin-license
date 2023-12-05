@@ -75,14 +75,23 @@ const db = getFirestore();
 export default function UserListPage() {
 
   const columns: Column[] = [
-    { id: 'title', label: 'Boradcast Name', minWidth: 10 },
-    { id: 'description', label: 'Template Name', minWidth: 25 },
-    { id: 'sendMessages', label: 'Send Messages', minWidth: 10 , align: 'center'},
-    { id: 'failedMessages', label: 'Failed Messages',  minWidth: 10 ,align: 'center'},
-    { id: 'createdAt', label: 'CreatedAt', minWidth: 100, align: 'left', },
-    { id: 'status', label: 'Status', minWidth: 100, align: 'center', type: 'badge' },
-   
-
+    { id: 'merchantId', label: 'Mercahnt Id',align: 'center', minWidth: 200 },
+    { id: 'stateCd', label: 'state id',align: 'center', minWidth: 200 },
+    { id: 'rcRegnNo', label: 'Rc Regn No', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcRegnDt', label: 'Rc Regn Dt', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcChasiNo', label: 'Rc Chasi No', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcEngNo', label: 'Rc Eng No', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcVhClassNDesc', label: 'Rc vh Class no', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcMakerDesc', label: 'Rc Maker Desc', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcMakerModel', label: 'Rc Maker Model', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcBodyTypeDesc', label: 'Rc Body Test Type', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcFuelDesc', label: 'Rc Fule Desc', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcColor', label: 'Rc Color', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcOwnerName', label: 'Rc Owner Name', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcFName', label: 'Rc F Name', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcPermanentAddress', label: 'Rc Permanent Address', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcPresentAddress', label: 'Rc Present address', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcFitUpto', label: 'Rc Fit Upto', minWidth: 200 , align: 'center',type:"boolean"},
     { id: 'action', label: 'Action', minWidth: 100, align: 'right', type: 'action' },
 
   ];

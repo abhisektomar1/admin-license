@@ -11,7 +11,7 @@ export interface Column {
   minWidth?: number;
   align?: any;
   format?: (value: number) => string;
-  type?: "string" | "image" | "action" | "badge" | "serial" | "description"  | "delete" | "update" ; // Add "serial" type
+  type?: "string" | "image" | "action" | "badge" | "serial" | "description"  | "delete" | "update" | "boolean"; // Add "serial" type
 }
 
 interface Row {
@@ -219,6 +219,18 @@ export default function CustomTable(props: Props) {
                                 </TableCell>
                               );
                             }
+                            if (columnType === "boolean") {
+                              console.log(value);
+                              
+                              return (
+                                <TableCell key={column.id} align={column.align}>
+                                  {
+                                    value ? "true": "false"
+                                  }
+                                </TableCell>
+                              );
+                            }
+                            
                             if (columnType === "action") {
                               return (
                                 <TableCell align="right" >
