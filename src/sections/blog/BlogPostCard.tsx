@@ -129,7 +129,7 @@ type PostContentProps = {
 export function PostContent({ title, view, comment, share, createdAt, index }: PostContentProps) {
   const isDesktop = useResponsive('up', 'md');
 
-  const linkTo = PATH_DASHBOARD.cases.list;
+  const linkTo = PATH_DASHBOARD.clientAccess.list;
 
   const latestPostLarge = index === 0;
 

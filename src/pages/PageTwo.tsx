@@ -12,7 +12,7 @@ export default function PageTwo() {
   return (
     <>
       <Helmet>
-        <title> Page Two | Urgernt ER</title>
+        <title> Page Two</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

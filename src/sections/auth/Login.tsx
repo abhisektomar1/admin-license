@@ -16,12 +16,11 @@ export default function Login() {
   return (
     <LoginLayout>
       <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-        <Typography variant="h4">Sign in to {AppDetails.appName} </Typography>
+        <Typography variant="h4">Sign in  </Typography>
 
         <Stack direction="row" spacing={0.5}>
-          <Typography variant="body2">New user?</Typography>
+         
 
-          <Link variant="subtitle2">Create an account</Link>
         </Stack>
 
         <Tooltip title={method} placement="left">

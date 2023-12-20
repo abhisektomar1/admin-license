@@ -14,7 +14,8 @@ import { useSnackbar } from '../../components/snackbar';
 import FormProvider, {
   RHFSwitch,
   RHFEditor,
-  RHFTextField
+  RHFTextField,
+  RHFCheckbox
 } from '../../components/hook-form';
 //
 import { styled } from '@mui/system';
@@ -53,34 +54,12 @@ export type FormValuesProps = IBlogNewPost;
 
 export default function BlogNewPostForm() {
 
-  const [categoryList] = useCollection(
-      collection(getFirestore(), "category"),
-      {
-          snapshotListenOptions: { includeMetadataChanges: true },
-      }
-  );
 
-  const [category, setcategory] = useState([]);
 
-  useEffect(() => {
-      const tempData : any = [];
-      if (categoryList) {
-          categoryList?.forEach((doc) => {
-              const childData = doc.data();
-              tempData.push(childData.title);
-          });
-          setcategory(tempData);
-      }
-  }, [categoryList]);  
-  
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
-  const [selectedCategory, setSelectedCategory] = useState('')
-  const [date, setDate] = useState<Dayjs | null>(
-    // dayjs(),
-  );
-  const selectedDate = dayjs(date).format('YYYY-MM-DD HH:MM');
+
 
   const NewBlogSchema = Yup.object().shape({
     // title: Yup.string().required('Title is required'),
@@ -92,12 +71,7 @@ export default function BlogNewPostForm() {
   });
 
   const defaultValues = {
-    title: '',
-    description: '',
-    body: '',
-    coverPage: undefined,
-    status: true,
-    thumbnail: undefined,
+
   };
 
   const methods = useForm<FormValuesProps>({
@@ -112,56 +86,22 @@ export default function BlogNewPostForm() {
     formState: { isSubmitting },
   } = methods;
 
-  function uploadFile(file:any, type:any) {
-    const metadata = {
-      contentType: 'image/jpeg',
-    };    
-    const storage = getStorage();
-    const fileName = `document-${type}-${new Date().getTime()}`;
-    const storageRef = ref(storage,`/case/${fileName}`);
-    const uploadFile = uploadBytesResumable(storageRef, file, metadata);
-    return new Promise((resolve, reject) => {
-      uploadFile.on(
-        "state_changed",
-        (snapshot : any) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          // console.log("Upload is " + progress + "% done");
-        },
-        (error: any) => {
-          console.log(error);
-          reject();
-        },
-        () => {
-          getDownloadURL(uploadFile.snapshot.ref).then((downloadURL : any) => {
-            resolve(downloadURL);
-          });
-        }
-      );
-    });
-  }
+
 
   const onSubmit = async (data: FormValuesProps) => {
     try {
-      const thumb = await uploadFile(data.coverPage,"thumb")
-      const cover = await uploadFile(data.thumbnail,"thumb")      
-      await addDoc(collection(DB,"cases"), {
-        ...data,
-        caseNo: 1,
-        category:selectedCategory,
-        thumbnail:thumb,
-        coverPage:cover,
-        date: dayjs(selectedDate).valueOf(),
-        createdAt : serverTimestamp(),
-      }).then(()=>{
+
+      await addDoc(collection(DB, "client"), {
+        ...data
+      }).then(() => {
         reset();
-        enqueueSnackbar('Cases create success!');
-      }).catch((e)=>{
+        enqueueSnackbar('client create success!');
+      }).catch((e) => {
         console.log(e);
-        enqueueSnackbar('Cases can"t create success!',{ variant:"error" });
-      }).finally(()=>{
-        navigate(PATH_DASHBOARD.cases.list)
-      });      
+        enqueueSnackbar('Cases can"t create success!', { variant: "error" });
+      }).finally(() => {
+        navigate(PATH_DASHBOARD.clientAccess.list)
+      });
     } catch (error) {
       console.error(error);
     }
@@ -172,101 +112,165 @@ export default function BlogNewPostForm() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
-            <Stack spacing={3}>
-              <RHFTextField name="title" label="Case Title" required />
-              <RHFTextField name="description" label="Case Description" required multiline rows={7} />
+            <Stack spacing={2} direction='row' >
+              <RHFTextField name="merchantId" label="merchant ID" />
+              <RHFTextField name="stateCd" label="State Cd" />
             </Stack>
-            <Grid container spacing={1} mt={2}>
-              <Grid item md={9}>
-                <div>
-                  <LabelStyle>Content</LabelStyle>
-                  <RHFEditor simple name="body" />
-                </div>
-              </Grid>
-              <Grid item md={3}>
-                <LabelStyle>Case Date</LabelStyle>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateTimePicker
-                    disablePast
-                    renderInput={(props) => <TextField {...props} name="date" />}
-                    value={date}
-                    onChange={(newValue) => {
-                      setDate(newValue);
-                    }}
-                  />
-                </LocalizationProvider>
-                <Stack mt={2}>
-                  <label htmlFor="">Select Category</label>
-                  <Select
-                    name='category'
-                    required
-                    label='category'
-                    value={selectedCategory}
-                    onChange={((e)=>{ setSelectedCategory(e.target.value)})}
-                    >
-                      {category.map((option,index)=>{
-                        return (
-                          <MenuItem key={index} value={option}>
-                          {option}
-                          </MenuItem>
-                        )
-                      })}
-                  </Select>
-                  {/* <RHFAutocomplete
-                    name="category"
-                    label="category"
-                    freeSolo
-                    options={category.map((option) => option)}
-                    ChipProps={{ size: 'small' }}
-                  /> */}
-                </Stack>
-                {/* <Stack mt={2}>
-                  <Card elevation={10} sx={{ borderRadius: 1, p: 1 }}>
-                    <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                      Cover Page
-                    </Typography>
-                    <input type="file" name='coverPage' required onChange={(e) => {
-                      setValue('coverPage', e.target?.files?.[0])
-                    }} />
-                  </Card>
-                  <Card elevation={10} sx={{ borderRadius: 1, p: 1, mt: 1 }}>
 
-                    <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                      Thumbnail
-                    </Typography>
-                    <input type="file" required name='thumbnail' onChange={(e) => {
-                      setValue('thumbnail', e.target?.files?.[0])
-                    }} />
-                  </Card>
-                </Stack> */}
-                <Stack mt={2}>
-                  <RHFSwitch
-                    name="status"
-                    label="Publish"
-                    labelPlacement="start"
-                    sx={{ mb: 1, mx: 0, width: 1, justifyContent: 'space-between' }}
-                  />
-                </Stack>
-              </Grid>
-            </Grid>
+            <Stack spacing={10} direction='row' margin={2} >
+              <RHFCheckbox name='rcRegnNo' label="Rc Registration No" />
+              <RHFCheckbox name='rcRegnDt' label="Rc Registration Dt" />
+              <RHFCheckbox name='rcChasiNo' label="Rc Chasi No" />
+            </Stack>
+
+            <Stack spacing={10} direction='row' margin={2} >
+              <RHFCheckbox name='rcEngNo' label="Rc Eng No" />
+              <RHFCheckbox name='rcVhClassNDesc' label="Rc Vs Class Desc" />
+              <RHFCheckbox name='rcMakerDesc' label="Rc Maker Desc" />
+            </Stack>
+
+            <Stack spacing={10} direction='row' margin={2} >
+              <RHFCheckbox name='rcMakerModel' label="Rc Maker Model" />
+              <RHFCheckbox name='rcBodyTypeDesc' label="Rc Body Type Desk" />
+              <RHFCheckbox name='rcFuelDesc' label="Rc Fuel Desc" />
+              </Stack>
+
+            <Stack spacing={10} direction='row' margin={2} >
+              <RHFCheckbox name='rcColor' label="Rc Color" />
+              <RHFCheckbox name='rcOwnerName' label="Rc Owner Name" />
+              <RHFCheckbox name='rcFName' label="Rc First Name" />
+              </Stack>
+         
+
+            <Stack spacing={10} direction='row' margin={2} >
+              <RHFCheckbox name='rcPermanentAddress' label="Rc Permanent Address" />
+              <RHFCheckbox name='rcPresentAddress' label="Rc Present Address" />
+              <RHFCheckbox name='rcFitUpto' label="Rc Fit upto" />
+              </Stack>
+
+            <Stack spacing={10} direction='row' margin={2} >
+              
+              <RHFCheckbox name='rcNpUpto' label="Rc Np Upto" />
+              <RHFCheckbox name='rcTaxUpto' label="Rc tax Upto" />
+              <RHFCheckbox name='rcNormsDesc' label="Rc Norms Desc" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcFinancer' label="Rc Financer" />
+              <RHFCheckbox name='rcInsuranceComp' label="Rc Insurance Comp" />
+              <RHFCheckbox name='rcInsurancePolicyNo' label="Rc Insurance Policy No" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcInsuranceUpro' label="Rc Insurance Upto" />
+              <RHFCheckbox name='rcRegisterdAt' label="Rc Registerd At " />
+              <RHFCheckbox name='rcStatusAsOn' label="Rc Status As On" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcManuMonthYear' label="Rc Menu Month year" />
+              <RHFCheckbox name='rcUnIDWt' label="Rc Un ID Wt" />
+              <RHFCheckbox name='rcGvw' label="Rc Gvw" />
+              </Stack>
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcNoCyl' label="Rc No Cyl" />
+              <RHFCheckbox name='rcCubicCap' label="Rc Cubic Cap" />
+              <RHFCheckbox name='rcSeatCap' label="Rc Seat Cap" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcSleeperCap' label="Rc Sleeper Cap" />
+              <RHFCheckbox name='rcStandCap' label="Rc stand Cap" />
+              <RHFCheckbox name='rcWheelBase' label="Rc Wheel Base" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcNpNo' label="Rc Np No" />
+              <RHFCheckbox name='rcNpIssuedBy' label="Rc Np Issued By" />
+              <RHFCheckbox name='rcOwnerSr' label="Rc owner Sr" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcMobileNo' label="Rc Mobile No" />
+              <RHFCheckbox name='rcVchCatg' label="Rc Vch Catg" />
+              <RHFCheckbox name='rcPuccDetails' label="Rc Pucc Details" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcPermitDetails' label="Rc permit Details" />
+              <RHFCheckbox name='rcNcrbStatus' label="Rc Ncrb Status" />
+              <RHFCheckbox name='rcBlackListStatus' label="Rc BlackList Status" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcNocDetails' label="Rc Noc Details" />
+              <RHFCheckbox name='rcOwnerCd' label="Rc Oner Cd" />
+              <RHFCheckbox name='rcVhType' label="Rc Vh Type" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcRegnUpto' label="Rc Regn upto" />
+              <RHFCheckbox name='rcPurchaseDt' label="Rc Purchase Dt" />
+              <RHFCheckbox name='rcOwnerHistory' label="Rc Owner Histroy" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcVhClass' label="Rc Vh Class" />
+              <RHFCheckbox name='rcNocDt' label="Rc Noc Dt" />
+              <RHFCheckbox name='rcRegnTypeCd' label="Rc Regn Type Cd" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcFuelCd' label="Rc Fuel Cd" />
+              <RHFCheckbox name='rcMakerCd' label="Rc Maker Cd" />
+              <RHFCheckbox name='rcModelCd' label="Rc Model Cd" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcNormsCd' label="Rc Norms Cd" />
+              <RHFCheckbox name='rcSaleAmt' label="Rc Sale Amt" />
+              <RHFCheckbox name='rcOwnCatgDesc' label="Rc Own Catg Desc" />
+              </Stack>
+
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcVchCatgDesc' label="Rc Vch Catg Desc" />
+              <RHFCheckbox name='rcOwnerCdDesc' label="Rc Owner Cd Desc" />
+              <RHFCheckbox name='rcDealer' label="Rc Dealer" />
+              </Stack>
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcDeemedDealer' label="Rc Deemed Dealer" />
+              <RHFCheckbox name='rcNonuse' label="Rc Non Use" />
+              <RHFCheckbox name='rcPassengerTax' label="Rc Passenger Tax" />
+              </Stack>
+              <Stack spacing={10} direction='row' margin={2} >
+
+              <RHFCheckbox name='rcGoodsTax' label="Rc Goods tax" />
+              </Stack>
+
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-              {/* <Button
-                fullWidth
-                color="inherit"
-                variant="outlined"
-                size="large"
-                onClick={handleOpenPreview}
-              >
-                Preview
-              </Button> */}
+
               <LoadingButton
                 fullWidth
                 type="submit"
                 variant="contained"
                 size="large"
-                loading={isSubmitting}
               >
-                Post
+                create
               </LoadingButton>
             </Stack>
 

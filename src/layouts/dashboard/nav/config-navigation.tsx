@@ -25,10 +25,10 @@ const navConfig = [
     subheader: 'Main',
     items: [
       { title: 'Dashboard', path: PATH_DASHBOARD.home, icon: ICONS.dashboard },
-      { title: 'Cases', path: PATH_DASHBOARD.cases.list, icon: ICONS.ecommerce },
-      { title: 'Category', path: PATH_DASHBOARD.category.list, icon: ICONS.analytics },
-      { title: 'Appointment', path: PATH_DASHBOARD.appointment.root, icon: ICONS.booking},
-      { title: 'Slots', path: PATH_DASHBOARD.slots.root, icon: ICONS.invoice },
+      { title: 'Client Access', path: PATH_DASHBOARD.clientAccess.list, icon: ICONS.user },
+      { title: 'Client Master', path: PATH_DASHBOARD.clientMaster.list, icon: ICONS.user },
+      { title: 'Ip Master', path: PATH_DASHBOARD.ipMaster.root, icon: ICONS.booking},
+     
     ],
   },
 ];

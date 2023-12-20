@@ -19,6 +19,7 @@ import {
   AppointmentList,
   Slots,
   EditCases,
+  Create,
 } from './elements';
 
 // ----------------------------------------------------------------------
@@ -50,28 +51,28 @@ export default function Router() {
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: 'home', element: <Home /> },
         {
-          path: 'cases',
+          path: 'clientAccess',
           children: [
-            { element: <Navigate to="/dashboard/cases/list" replace />, index: true },
+            { element: <Navigate to="/dashboard/clientAccess/list" replace />, index: true },
             { path: 'list', element: <CasesList /> },
             { path: 'new', element: <CasesCreate /> },
             { path: 'edit/:id', element: <EditCases /> },
           ],
         },
         {
-          path: 'category',
+          path: 'clientMaster',
           children: [
-            { element: <Navigate to="/dashboard/category/list" replace />, index: true },
+            { element: <Navigate to="/dashboard/clientMaster/list" replace />, index: true },
             { path: 'list', element: <CategoryList /> },
             { path: 'new', element: <CreateCategory /> },
           ],
         },
         {
-          path: 'appointment',
+          path: 'ipMaster',
           children: [
-            { element: <Navigate to="/dashboard/appointment/list" replace />, index: true },
+            { element: <Navigate to="/dashboard/ipMaster/list" replace />, index: true },
             { path: 'list', element: <AppointmentList /> },
-            // { path: 'new', element: <CreateCategory /> },
+             { path: 'new', element: <Create /> },
           ],
         },
         {

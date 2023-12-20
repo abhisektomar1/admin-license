@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet-async";
-import { paramCase } from "change-case";
 import { useState, useEffect } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 // @mui
@@ -44,6 +43,7 @@ import {
 } from "../../components/table";
 // sections
 import { UserTableToolbar, UserTableRow } from "../../sections/cases";
+import CustomTable, { Column } from "src/components/customTable";
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = ["all"];
@@ -73,34 +73,38 @@ const TABLE_HEAD = [
 
 const db = getFirestore();
 export default function UserListPage() {
-  const {
-    dense,
-    page,
-    order,
-    orderBy,
-    rowsPerPage,
-    setPage,
-    //
-    selected,
-    setSelected,
-    onSelectRow,
-    onSelectAllRows,
-    //
-    onSort,
-    onChangeDense,
-    onChangePage,
-    onChangeRowsPerPage,
-  } = useTable();
+
+  const columns: Column[] = [
+    { id: 'merchantId', label: 'Mercahnt Id',align: 'center', minWidth: 200 },
+    { id: 'stateCd', label: 'state id',align: 'center', minWidth: 200 },
+    { id: 'rcRegnNo', label: 'Rc Regn No', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcRegnDt', label: 'Rc Regn Dt', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcChasiNo', label: 'Rc Chasi No', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcEngNo', label: 'Rc Eng No', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcVhClassNDesc', label: 'Rc vh Class no', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcMakerDesc', label: 'Rc Maker Desc', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcMakerModel', label: 'Rc Maker Model', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcBodyTypeDesc', label: 'Rc Body Test Type', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcFuelDesc', label: 'Rc Fule Desc', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcColor', label: 'Rc Color', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcOwnerName', label: 'Rc Owner Name', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcFName', label: 'Rc F Name', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcPermanentAddress', label: 'Rc Permanent Address', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcPresentAddress', label: 'Rc Present address', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'rcFitUpto', label: 'Rc Fit Upto', minWidth: 200 , align: 'center',type:"boolean"},
+    { id: 'action', label: 'Action', minWidth: 100, align: 'right', type: 'action' },
+
+  ];
 
   const { themeStretch } = useSettingsContext();
 
   const navigate = useNavigate();
 
-  const [value] = useCollection(collection(getFirestore(), "cases"), {
+  const [value] = useCollection(collection(getFirestore(), "client"), {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
-  const [tableData, setTableData] = useState(_userList);
+  const [tableData, setTableData] = useState();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -110,7 +114,7 @@ export default function UserListPage() {
       let index = 1;
       value?.forEach((doc: any) => {
         const childData = doc.data();
-        tempData.push({ ...childData, id: index++, fid: doc.id });
+        tempData.push({ ...childData, id: index++, });
       });
 
       setTableData(tempData);
@@ -118,315 +122,75 @@ export default function UserListPage() {
     }
   }, [value]);
 
-  console.log(loading);
-
-  const [filterName, setFilterName] = useState("");
-
-  const [filterRole, setFilterRole] = useState("all");
-
-  const [openConfirm, setOpenConfirm] = useState(false);
-
-  const [filterStatus, setFilterStatus] = useState("all");
-
-  const dataFiltered = applyFilter({
-    inputData: tableData,
-    comparator: getComparator(order, orderBy),
-    filterName,
-    filterRole,
-    filterStatus,
-  });
-
-  const dataInPage = dataFiltered.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
-
-  const denseHeight = dense ? 52 : 72;
-
-  const isFiltered =
-    filterName !== "" || filterRole !== "all" || filterStatus !== "all";
-
-  const isNotFound =
-    (!dataFiltered.length && !!filterName) ||
-    (!dataFiltered.length && !!filterRole) ||
-    (!dataFiltered.length && !!filterStatus);
-
-  const handleOpenConfirm = () => {
-    setOpenConfirm(true);
-  };
-
-  const handleCloseConfirm = () => {
-    setOpenConfirm(false);
-  };
-
-  const handleFilterStatus = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: string
-  ) => {
-    setPage(0);
-    setFilterStatus(newValue);
-  };
-
-  const handleFilterName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
-
-  const handleFilterRole = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(0);
-    setFilterRole(event.target.value);
-  };
-
-  const handleDeleteRow = async (id: string) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  };
-
-  const handleDeleteRows = (selectedRows: string[]) => {
-    const deleteRows = tableData.filter(
-      (row) => !selectedRows.includes(row.id)
-    );
-    setSelected([]);
-    setTableData(deleteRows);
-
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage =
-          Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  };
-
-  const handleEditRow = (id: string) => {
-    navigate(PATH_DASHBOARD.cases.edit(id));
-  };
-
-  const handleResetFilter = () => {
-    setFilterName("");
-    setFilterRole("all");
-    setFilterStatus("all");
-  };
+  console.log(tableData, "daata");
 
   return (
     <>
       <Helmet>
-        <title> Cases: List | Urgent ER</title>
+        <title> Client List</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : "lg"}>
         <CustomBreadcrumbs
-          heading="Cases List"
+          heading="Client List"
           links={[
             { name: "Dashboard", href: PATH_DASHBOARD.root },
-            { name: "Cases", href: PATH_DASHBOARD.cases.root },
+            { name: "Cases", href: PATH_DASHBOARD.clientAccess.root },
             { name: "List" },
           ]}
           action={
             <Button
               component={RouterLink}
-              to={PATH_DASHBOARD.cases.new}
+              to={PATH_DASHBOARD.clientAccess.new}
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
             >
-              New Case
+              New Client
             </Button>
           }
         />
+ <CustomTable
+          columns={columns}
+          rows={ tableData ??[]}
+          // onClick={(e, row) => {
+          //   handleOpenMenu(e, row)
+          // }}
+          
+        />
 
-        <Card>
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: "background.neutral",
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
-            ))}
-          </Tabs>
-
-          <Divider />
-
-          <UserTableToolbar
-            isFiltered={isFiltered}
-            filterName={filterName}
-            filterRole={filterRole}
-            optionsRole={ROLE_OPTIONS}
-            onFilterName={handleFilterName}
-            onFilterRole={handleFilterRole}
-            onResetFilter={handleResetFilter}
-          />
-
-          <TableContainer sx={{ position: "relative", overflow: "unset" }}>
-            <TableSelectedAction
-              dense={dense}
-              numSelected={selected.length}
-              rowCount={tableData.length}
-              onSelectAllRows={(checked) =>
-                onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={handleOpenConfirm}>
-                    <Iconify icon="eva:trash-2-outline" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-
-            <Scrollbar>
-              <Table size={dense ? "small" : "medium"} sx={{ minWidth: 800 }}>
-                <TableHeadCustom
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
-                  numSelected={selected.length}
-                  onSort={onSort}
-                  onSelectAllRows={(checked) =>
-                    onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.id)
-                    )
-                  }
-                />
-                {loading ? (
-                  <>
-                    <TableBody>
-                      {dataFiltered
-                        .slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage
-                        )
-                        .map((row, index) => (
-                          <UserTableRow
-                            row={row}
-                            key={index}
-                            onDeleteRow={() =>
-                              handleDeleteRow(row.fid as string)
-                            }
-                            onEditRow={() => {
-                              handleEditRow(row.fid as string);
-                            }}
-                          />
-                        ))}
-
-                      <TableEmptyRows
-                        height={denseHeight}
-                        emptyRows={emptyRows(
-                          page,
-                          rowsPerPage,
-                          tableData.length
-                        )}
-                      />
-                      <TableNoData isNotFound={isNotFound} />
-                    </TableBody>
-                  </>
-                ) : (
-                  <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', textAlign: 'center', height: '200px' }}>
-                    <CircularProgress sx={{textAlign: 'center'}} />
-                  </Box>
-                )}
-              </Table>
-            </Scrollbar>
-          </TableContainer>
-
-          <TablePaginationCustom
-            count={dataFiltered.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={onChangeRowsPerPage}
-            //
-            dense={dense}
-            onChangeDense={onChangeDense}
-          />
-        </Card>
+        {/* <Popover
+          open={Boolean(open)}
+          anchorEl={open}
+          onClose={handleCloseMenu}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          PaperProps={{
+            sx: {
+              p: 1,
+              width: 140,
+              '& .MuiMenuItem-root': {
+                px: 1,
+                typography: 'body2',
+                borderRadius: 0.75,
+              },
+            },
+          }}
+        >
+          <MenuItem onClick={(e) => {
+            navigate(PATH_DASHBOARD.broadcast.view(id as any))
+          }} >
+            <Iconify icon={'ic:baseline-remove-red-eye'} sx={{ mr: 2 }} />
+            View
+          </MenuItem>
+        </Popover>
+         */}
       </Container>
 
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {selected.length} </strong>{" "}
-            items?
-          </>
-        }
-        action={
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDeleteRows(selected);
-              handleCloseConfirm();
-            }}
-          >
-            Delete
-          </Button>
-        }
-      />
+      
+     
     </>
   );
 }
 
 // ----------------------------------------------------------------------
 
-function applyFilter({
-  inputData,
-  comparator,
-  filterName,
-  filterStatus,
-  filterRole,
-}: {
-  inputData: Case[];
-  comparator: (a: any, b: any) => number;
-  filterName: string;
-  filterStatus: boolean | string;
-  filterRole: string;
-}) {
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
-
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-
-  inputData = stabilizedThis.map((el) => el[0]);
-
-  if (filterName) {
-    inputData = inputData.filter(
-      (user) =>
-        user.title.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-    );
-  }
-
-  // if (filterStatus !== 'null') {
-  //   inputData = inputData.filter((user) => user.status === filterStatus);
-  // }
-
-  // if (filterRole !== 'all') {
-  //   inputData = inputData.filter((user) => user.role === filterRole);
-  // }
-
-  return inputData;
-}

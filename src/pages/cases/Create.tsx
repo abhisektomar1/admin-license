@@ -17,12 +17,12 @@ export default function BlogNewPostPage() {
   return (
     <>
       <Helmet>
-        <title> Cases: New Cases | UrgentER</title>
+        <title>  New Client</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new Cases"
+          heading="Create a new client"
           links={[
             {
               name: 'Dashboard',
@@ -30,7 +30,7 @@ export default function BlogNewPostPage() {
             },
             {
               name: 'Cases',
-              href: PATH_DASHBOARD.cases.list,
+              href: PATH_DASHBOARD.clientAccess.list,
             },
             {
               name: 'Create',

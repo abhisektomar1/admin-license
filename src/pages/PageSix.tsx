@@ -12,7 +12,7 @@ export default function PageSix() {
   return (
     <>
       <Helmet>
-        <title> Page Six | Urgernt ER</title>
+        <title> Page Six </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>

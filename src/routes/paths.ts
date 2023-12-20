@@ -15,22 +15,22 @@ export const PATH_AUTH = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   home: path(ROOTS_DASHBOARD, '/home'),
-  cases: {
-    root: path(ROOTS_DASHBOARD, '/cases'),
-    new: path(ROOTS_DASHBOARD, '/cases/new'),
-    list: path(ROOTS_DASHBOARD, '/cases/list'),
-    edit: (id: string) => path(ROOTS_DASHBOARD, `/cases/edit/${id}`),
+  clientAccess: {
+    root: path(ROOTS_DASHBOARD, '/clientAccess'),
+    new: path(ROOTS_DASHBOARD, '/clientAccess/new'),
+    list: path(ROOTS_DASHBOARD, '/clientAccess/list'),
+  
   },
-  category: {
-    root: path(ROOTS_DASHBOARD, '/category'),
-    new: path(ROOTS_DASHBOARD, '/category/new'),
-    list: path(ROOTS_DASHBOARD, '/category/list'),
-    edit: (name: string) => path(ROOTS_DASHBOARD, `/category/${name}/edit`),
+  clientMaster: {
+    root: path(ROOTS_DASHBOARD, '/clientMaster'),
+    new: path(ROOTS_DASHBOARD, '/clientMaster/new'),
+    list: path(ROOTS_DASHBOARD, '/clientMaster/list'),
+   // edit: (name: string) => path(ROOTS_DASHBOARD, `/clientMaster/${name}/edit`),
   },
-  appointment: {
-    root: path(ROOTS_DASHBOARD, '/appointment'),
-    // new: path(ROOTS_DASHBOARD, '/category/new'),
-    list: path(ROOTS_DASHBOARD, '/category/list'),
+  ipMaster: {
+    root: path(ROOTS_DASHBOARD, '/ipMaster'),
+     new: path(ROOTS_DASHBOARD, '/ipMaster/new'),
+    list: path(ROOTS_DASHBOARD, '/ipMaster/list'),
     // edit: (name: string) => path(ROOTS_DASHBOARD, `/category/${name}/edit`),
   },
   slots: {

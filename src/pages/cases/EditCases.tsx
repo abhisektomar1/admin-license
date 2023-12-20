@@ -30,7 +30,7 @@ export default function BlogNewPostPage() {
                         },
                         {
                             name: 'Cases',
-                            href: PATH_DASHBOARD.cases.list,
+                            href: PATH_DASHBOARD.clientAccess.list,
                         },
                         {
                             name: 'Edit',

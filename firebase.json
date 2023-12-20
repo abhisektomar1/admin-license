@@ -1,7 +1,6 @@
 {
   "hosting": {
     "public": "build",
-    "site": "admin-urgenter",
     "ignore": [
       "firebase.json",
       "**/.*",

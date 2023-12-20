@@ -82,21 +82,21 @@ export default function Create() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmit = async (data: FormValuesProps) => {
+  const onSubmit = async (data: any) => {
     console.log(data);
     
     try {
       
-      await addDoc(collection(DB,"clientMaster"), {
+      await addDoc(collection(DB,"ipMaster"), {
          ...data,
       }).then(()=>{
         reset();
-        enqueueSnackbar('Client master success!');
+        enqueueSnackbar('ip master success!');
       }).catch((e)=>{
         console.log(e);
-        enqueueSnackbar('Clinetr Master can"t create success!',{ variant:"error" });
+        enqueueSnackbar('ip Master can"t create success!',{ variant:"error" });
       }).finally(()=>{
-        navigate(PATH_DASHBOARD.clientMaster.list)
+        navigate(PATH_DASHBOARD.ipMaster.list)
       });      
     } catch (error) {
       console.error(error);
@@ -107,20 +107,20 @@ export default function Create() {
   return (
     <>
       <Helmet>
-        <title> Clinet Master</title>
+        <title> ip Master</title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Create a new Client Master"
+          heading="Create a new ip Master"
           links={[
             {
               name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Client Master',
-              href: PATH_DASHBOARD.clientMaster.list,
+              name: 'ip Master',
+              href: PATH_DASHBOARD.ipMaster.list,
             },
             {
               name: 'Create',
@@ -134,46 +134,27 @@ export default function Create() {
               <Stack spacing={2} direction='row' m={2}>
               <RHFTextField name="merchantId" label="Merchant Id"  />
               <RHFTextField name="stateCd" label="State Cd"  />
-              <RHFTextField name="merchantKey" label="Merchant Key"  />
+              <RHFTextField name="testServerIp4" label="Test Server Ip4"  />
               </Stack>
 
 
               <Stack spacing={2} direction='row' m={2}>
-              <RHFTextField name="clientName" label="Client Name"  />
-              <RHFTextField name="clientAddress" label="Client Address Title"  />
-              <RHFTextField name="clientCity" label="Client Citry"  />
+              <RHFTextField name="testServerIp6" label="Test Server Ip6"  />
+              <RHFTextField name="stageServerIp4" label="Stage Server Ip4"  />
+              <RHFTextField name="stageServerIp6" label="Stage Server Ip6"  />
               </Stack>
 
               <Stack spacing={2} direction='row' m={2}>
-              <RHFTextField name="clientDistrict" label="Client District"  />
-              <RHFTextField name="clientPincode" label="Client Pincode"  />
-              <RHFTextField name="clientMobileNo" label="Client Mobile No"  />
-              </Stack>
-
-
-              <Stack spacing={2} direction='row' m={2}>
-              <RHFTextField name="clientOfficeNo" label="Client Office no"  />
-              <RHFTextField name="clientEmailid" label="Client Email No "  />
-              <RHFTextField name="organizationName" label="Organization Name"  />
+              <RHFTextField name="prodServerIp4" label="Prod Server Ip4"  />
+              <RHFTextField name="prodServerIp6" label="Prod Server Ip6"  />
+             
               </Stack>
 
 
               <Stack spacing={2} direction='row' m={2}>
-              <RHFTextField name="validity" label="Validity"  />
-              <RHFTextField name="opDt" label="Op Dt "  />
-              <RHFTextField name="napixUserId" label="Napix User Id"  />
-              </Stack>
-
-
-              <Stack spacing={2} direction='row' m={2} >
-              <RHFTextField name="napixUserIdCreatedOn" label="Napix User Id created on"  />
-              <RHFTextField name="auditCertificateValidUpto" label="Audit Certificate Valid Upto"  />
-              </Stack>
-
-              <Stack spacing={2} direction='row' m={2}>
-              <RHFCheckbox name='status' label="Status" />
-              <RHFCheckbox name='encryption' label="Encryption" />
-              <RHFCheckbox name='isNapixRequired' label="iS Napix Required" />
+              <RHFCheckbox name='testServerstatus' label="Test Sever Status" />
+              <RHFCheckbox name='stageServerStatus' label="tage Sever Status" />
+              <RHFCheckbox name='prodServerStatus' label="Prod Sever Status" />
 
               </Stack>
           </Card>
@@ -185,7 +166,7 @@ export default function Create() {
                 variant="contained"
                 size="large"
               >
-                Create Client Master
+                Create ip Master
               </LoadingButton>
      
     </FormProvider>

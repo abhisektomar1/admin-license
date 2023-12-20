@@ -8,7 +8,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Login | Urgernt ER</title>
+        <title> Login</title>
       </Helmet>
 
       <Login />

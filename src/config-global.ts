@@ -7,13 +7,12 @@ import { PATH_DASHBOARD } from './routes/paths';
 export const HOST_API_KEY = process.env.REACT_APP_HOST_API_KEY || '';
 
 export const FIREBASE_API = {
-  apiKey: "AIzaSyBC08tQ_fJ0l27iNpyhhvMjiiSg4hb6izc",
-  authDomain: "urgent-er.firebaseapp.com",
-  projectId: "urgent-er",
-  storageBucket: "urgent-er.appspot.com",
-  messagingSenderId: "31491647897",
-  appId: "1:31491647897:web:a5ad2163f3fb53aed14b08",
-  measurementId: "G-QPW52PZV1D"
+  apiKey: "AIzaSyDWHZR03NNYK7ExiY1hOURSetE7IOdIbV4",
+  authDomain: "admin-licence.firebaseapp.com",
+  projectId: "admin-licence",
+  storageBucket: "admin-licence.appspot.com",
+  messagingSenderId: "368801514024",
+  appId: "1:368801514024:web:9efa63fcd8cc9fe9912b1d"
 };
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL

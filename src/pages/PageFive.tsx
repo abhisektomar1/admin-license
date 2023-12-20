@@ -12,7 +12,7 @@ export default function PageFive() {
   return (
     <>
       <Helmet>
-        <title> Page Five | Urgernt ER</title>
+        <title> Page Five </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
